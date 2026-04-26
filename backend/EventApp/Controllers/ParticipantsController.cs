@@ -1,5 +1,6 @@
 using EventApp.Data;
 using EventApp.Models;
+using EventApp.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,9 @@ public class ParticipantsController : ControllerBase
         _db = db;
     }
 
-    public record RegisterRequest(string FirstName, string LastName, string NationalId, int EventId);
-
     // POST new participant to an event
     [HttpPost]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+    public async Task<IActionResult> Register([FromBody] RegisterParticipantRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.FirstName))
             return BadRequest(new { message = "First name is required." });
@@ -62,13 +61,13 @@ public class ParticipantsController : ControllerBase
         _db.Participants.Add(participant);
         await _db.SaveChangesAsync();
 
-        return Ok(new {
+        return Ok(new ParticipantResponse(
             participant.Id,
             participant.FirstName,
             participant.LastName,
             participant.NationalId,
             participant.EventId
-        });
+        ));
     }
 
     // GET participants by eventId
@@ -78,18 +77,13 @@ public class ParticipantsController : ControllerBase
     {
         var participants = await _db.Participants
             .Where(p => p.EventId == eventId)
-            .Select(p => new {
-                p.Id,
-                p.FirstName,
-                p.LastName,
-                p.NationalId
-            })
+            .Select(p => new ParticipantResponse(p.Id, p.FirstName, p.LastName, p.NationalId, p.EventId))
             .ToListAsync();
 
         return Ok(participants);
     }
 
-    // DELETE participant from specific event
+    // DELETE participant 
     [HttpDelete("delete/{id}")]
     [Authorize]
     public async Task<IActionResult> DeleteParticipant(int id)

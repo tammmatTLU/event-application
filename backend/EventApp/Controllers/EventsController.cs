@@ -1,4 +1,5 @@
 using EventApp.Data;
+using EventApp.DTOs;
 using EventApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,17 +25,16 @@ public class EventsController : ControllerBase
             .Include(e => e.Participants)
             .ToListAsync();
 
-        return Ok(events.Select(e => new
-        {
+        var response = events.Select(e => new EventResponse(
             e.Id,
             e.Name,
             e.Time,
             e.MaxAttendees,
-            ParticipantCount = e.Participants.Count
-        }));
-    }
+            e.Participants.Count
+        ));
 
-    public record CreateEventRequest(string Name, DateTime Time, int MaxAttendees);
+        return Ok(response);
+    }
 
     [HttpPost]
     [Authorize]
@@ -62,7 +62,7 @@ public class EventsController : ControllerBase
         _db.Events.Add(ev);
         await _db.SaveChangesAsync();
 
-        return Ok(ev);
+        return Ok(new EventResponse(ev.Id, ev.Name, ev.Time, ev.MaxAttendees, 0));
     }
 
     [HttpDelete("delete/{id}")]

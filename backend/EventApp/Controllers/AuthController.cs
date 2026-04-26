@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using EventApp.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,8 +17,6 @@ public class AuthController : ControllerBase
     {
         _config = config;
     }
-
-    public record LoginRequest(string Email, string Password);
 
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequest request)
@@ -36,7 +35,7 @@ public class AuthController : ControllerBase
             expires: DateTime.UtcNow.AddHours(8),
             signingCredentials: creds
         );
-
-        return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+        return Ok(new LoginResponse(tokenString));
     }
 }
