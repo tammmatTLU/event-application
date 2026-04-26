@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import RegisterForm from './RegisterForm';
 import client from '../api/client';
+import ParticipantsModal from './ParticipantsModal';
 
 export default function EventList({ events, onRefresh, isAdmin }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [managingEvent, setManagingEvent] = useState(null);
 
   const handleDelete = async (eventId) => {
     if (!window.confirm('Are you sure you want to delete this event?')) return;
@@ -44,6 +46,14 @@ export default function EventList({ events, onRefresh, isAdmin }) {
             </button>
             {isAdmin && (
               <button
+                style={styles.buttonSecondary}
+                onClick={() => setManagingEvent(event)}
+              >
+                👥 Edit participants
+              </button>
+            )}
+            {isAdmin && (
+              <button
                 style={styles.buttonDanger}
                 onClick={() => handleDelete(event.id)}
               >
@@ -62,6 +72,13 @@ export default function EventList({ events, onRefresh, isAdmin }) {
             onRefresh();
             setSelectedEvent(null);
           }}
+        />
+      )}
+      {managingEvent && (
+        <ParticipantsModal
+          event={managingEvent}
+          onClose={() => setManagingEvent(null)}
+          onChanged={onRefresh}
         />
       )}
     </>
@@ -117,5 +134,17 @@ const styles = {
     borderRadius: '4px',
     fontSize: '0.95rem',
     display: 'block',
+    width: '100%',
+  },
+  buttonSecondary: {
+    marginTop: '0.5rem',
+    background: '#7f8c8d',
+    color: 'white',
+    border: 'none',
+    padding: '0.5rem 1.2rem',
+    borderRadius: '4px',
+    fontSize: '0.95rem',
+    display: 'block',
+    width: '100%',
   },
 };
