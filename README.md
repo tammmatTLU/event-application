@@ -70,7 +70,11 @@ Still inside `backend/EventApp/`, run:
 dotnet run
 ```
 
-The API will start on `http://localhost:5054`. The SQLite database (`events.db`) is created automatically on first run — no setup needed.
+The API will start on the port specified in `Properties/launchSettings.json` — 
+by default `http://localhost:5054`. If this differs on your machine, update 
+`VITE_API_URL` in the frontend `.env` file to match.
+
+The SQLite database (`events.db`) is created automatically on first run — no setup needed.
 
 ### 4. Configure the frontend
 
