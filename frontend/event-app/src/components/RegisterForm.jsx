@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import client from '../api/client';
+import { registerParticipant } from '../api/participants';
 import '../styles/RegisterForm.css';
 
 export default function RegisterForm({ event, onClose, onRegistered }) {
@@ -14,12 +14,7 @@ export default function RegisterForm({ event, onClose, onRegistered }) {
     setError('');
     setSuccess('');
     try {
-      await client.post('/participants', {
-        firstName,
-        lastName,
-        nationalId,
-        eventId: event.id,
-      });
+      await registerParticipant(firstName, lastName, nationalId, event.id);
       setSuccess('Successfully registered!');
       onRegistered();
       setFirstName('');

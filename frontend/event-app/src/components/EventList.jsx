@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import RegisterForm from './RegisterForm';
-import client from '../api/client';
+import { deleteEvent } from '../api/events';
 import ParticipantsModal from './ParticipantsModal';
 import '../styles/EventList.css';
 
@@ -11,7 +11,7 @@ export default function EventList({ events, onRefresh, isAdmin }) {
   const handleDelete = async (eventId) => {
     if (!window.confirm('Are you sure you want to delete this event?')) return;
     try {
-      await client.delete(`/events/delete/${eventId}`);
+      await deleteEvent(eventId);
       onRefresh();
     } catch {
       alert('Failed to delete event.');

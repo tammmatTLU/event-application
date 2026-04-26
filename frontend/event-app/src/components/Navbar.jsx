@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import client from '../api/client';
-import '../styles/Navbar.css'
+import '../styles/Navbar.css';
+import { login } from '../api/auth';
 
 export default function Navbar({ isAdmin, onLoginSuccess, onLogout }) {
   const [showModal, setShowModal] = useState(false);
@@ -12,7 +12,7 @@ export default function Navbar({ isAdmin, onLoginSuccess, onLogout }) {
     e.preventDefault();
     setError('');
     try {
-      const res = await client.post('/auth/login', { email, password });
+      const res = await login(email, password);
       localStorage.setItem('token', res.data.token);
       onLoginSuccess();
       setShowModal(false);

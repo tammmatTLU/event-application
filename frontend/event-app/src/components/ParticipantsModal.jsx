@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import client from '../api/client';
+import { getParticipants, deleteParticipant } from '../api/participants';
 import '../styles/ParticipantsModal.css';
 
 export default function ParticipantsModal({ event, onClose, onChanged }) {
@@ -13,9 +13,7 @@ export default function ParticipantsModal({ event, onClose, onChanged }) {
     const fetchParticipants = async () => {
       setLoading(true);
       try {
-        const res = await client.get(`/participants/event/${event.id}`, {
-          signal: controller.signal,
-        });
+        const res = await getParticipants(event.id, controller.signal);
         setParticipants(res.data);
       } catch (err) {
         if (err.code !== 'ERR_CANCELED') {
@@ -33,7 +31,7 @@ export default function ParticipantsModal({ event, onClose, onChanged }) {
   const handleDelete = async (participantId) => {
     if (!window.confirm('Remove this participant?')) return;
     try {
-      await client.delete(`/participants/delete/${participantId}`);
+      await deleteParticipant(participantId);
       onChanged();
       setParticipants(prev => prev.filter(p => p.id !== participantId));
     } catch {

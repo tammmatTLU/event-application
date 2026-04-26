@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import client from './api/client';
+import { getEvents } from './api/events';
 import Navbar from './components/Navbar';
 import EventList from './components/EventList';
 import CreateEventForm from './components/CreateEventForm';
@@ -10,7 +10,7 @@ export default function App() {
 
   const fetchEvents = async () => {
     try {
-      const res = await client.get('/events');
+      const res = await getEvents();
       setEvents(res.data);
     } catch {
       setEvents([]);

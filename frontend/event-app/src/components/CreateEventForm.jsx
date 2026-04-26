@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import client from '../api/client';
+import { createEvent, resetDatabase } from '../api/events';
 import '../styles/CreateEventForm.css'
 
 export default function CreateEventForm({ onEventCreated }) {
@@ -12,7 +12,7 @@ export default function CreateEventForm({ onEventCreated }) {
   const handleReset = async () => {
     if (!window.confirm('Are you sure? This will delete all events and participants.')) return;
     try {
-      await client.delete('/admin/reset');
+      await resetDatabase();
       setSuccess('Database cleared.');
       onEventCreated();
     } catch {
@@ -25,11 +25,7 @@ export default function CreateEventForm({ onEventCreated }) {
     setError('');
     setSuccess('');
     try {
-      await client.post('/events', {
-        name,
-        time: new Date(time).toISOString(),
-        maxAttendees: parseInt(maxAttendees),
-      });
+      await createEvent(name, new Date(time).toISOString(), parseInt(maxAttendees));
       setSuccess('Event created!');
       setName('');
       setTime('');
