@@ -32,10 +32,10 @@ public class ParticipantsController : ControllerBase
         if (string.IsNullOrWhiteSpace(request.NationalId))
             return BadRequest(new { message = "National ID is required." });
         
-        if (!request.FirstName.All(char.IsAsciiLetter))
+        if (!request.FirstName.All(char.IsLetter))
             return BadRequest(new { message = "First name must contain only letters." });
 
-        if (!request.LastName.All(char.IsAsciiLetter))
+        if (!request.LastName.All(char.IsLetter))
             return BadRequest(new { message = "Last name must contain only letters." });
 
         if (!request.NationalId.All(char.IsDigit))
