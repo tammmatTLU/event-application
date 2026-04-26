@@ -1,25 +1,12 @@
-import { useEffect, useState } from 'react';
-import { getEvents } from './api/events';
+import { useEvents } from './hooks/useEvents';
+import { useState } from 'react';
 import Navbar from './components/Navbar';
 import EventList from './components/EventList';
 import CreateEventForm from './components/CreateEventForm';
 
 export default function App() {
-  const [events, setEvents] = useState([]);
   const [isAdmin, setIsAdmin] = useState(!!localStorage.getItem('token'));
-
-  const fetchEvents = async () => {
-    try {
-      const res = await getEvents();
-      setEvents(res.data);
-    } catch {
-      setEvents([]);
-    }
-  };
-
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+  const { events, loading, error, refetch } = useEvents();
 
   return (
     <>

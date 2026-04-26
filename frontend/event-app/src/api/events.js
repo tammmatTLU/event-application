@@ -1,8 +1,8 @@
 import client from './client';
 
 // GET fetch all events
-export const getEvents = () =>
-  client.get('/events');
+export const getEvents = (signal) =>
+  client.get('/events', { signal });
 
 // POST create new event
 export const createEvent = (name, time, maxAttendees) =>

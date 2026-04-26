@@ -1,42 +1,12 @@
-import { useEffect, useState } from 'react';
-import { getParticipants, deleteParticipant } from '../api/participants';
+import { useParticipants } from '../hooks/useParticipants';
 import '../styles/ParticipantsModal.css';
 
 export default function ParticipantsModal({ event, onClose, onChanged }) {
-  const [participants, setParticipants] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    const fetchParticipants = async () => {
-      setLoading(true);
-      try {
-        const res = await getParticipants(event.id, controller.signal);
-        setParticipants(res.data);
-      } catch (err) {
-        if (err.code !== 'ERR_CANCELED') {
-          setError('Failed to load participants.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchParticipants();
-    return () => controller.abort();
-  }, []);
+  const { participants, loading, error, removeParticipant } = useParticipants(event.id);
 
   const handleDelete = async (participantId) => {
-    if (!window.confirm('Remove this participant?')) return;
-    try {
-      await deleteParticipant(participantId);
-      onChanged();
-      setParticipants(prev => prev.filter(p => p.id !== participantId));
-    } catch {
-      alert('Failed to remove participant.');
-    }
+    const success = await removeParticipant(participantId);
+    if (success) onChanged();
   };
 
   return (
