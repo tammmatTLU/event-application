@@ -8,6 +8,17 @@ export default function CreateEventForm({ onEventCreated }) {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
+  const handleReset = async () => {
+    if (!window.confirm('Are you sure? This will delete all events and participants.')) return;
+    try {
+      await client.delete('/admin/reset');
+      setSuccess('Database cleared.');
+      onEventCreated();
+    } catch {
+      setError('Failed to reset database.');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -59,6 +70,10 @@ export default function CreateEventForm({ onEventCreated }) {
         {error && <p style={styles.error}>{error}</p>}
         {success && <p style={styles.success}>{success}</p>}
         <button style={styles.button} type="submit">Create event</button>
+        <hr style={{ margin: '1.5rem 0', borderColor: '#eee' }} />
+        <button style={styles.buttonDanger} onClick={handleReset}>
+          🗑 Clear all data
+        </button>
       </form>
     </div>
   );
@@ -91,4 +106,12 @@ const styles = {
   },
   error: { color: 'red', marginBottom: '1rem' },
   success: { color: 'green', marginBottom: '1rem' },
+  buttonDanger: {
+    background: '#e74c3c',
+    color: 'white',
+    border: 'none',
+    padding: '0.5rem 1.2rem',
+    borderRadius: '4px',
+    fontSize: '0.95rem',
+  },
 };
