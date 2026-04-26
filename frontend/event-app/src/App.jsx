@@ -31,7 +31,7 @@ export default function App() {
       <main style={{ maxWidth: '900px', margin: '2rem auto', padding: '0 1rem' }}>
         {isAdmin && <CreateEventForm onEventCreated={fetchEvents} />}
         <h2 style={{ marginBottom: '1rem' }}>Upcoming Events</h2>
-        <EventList events={events} onRefresh={fetchEvents} />
+        <EventList events={events} onRefresh={fetchEvents} isAdmin={isAdmin}/>
       </main>
     </>
   );

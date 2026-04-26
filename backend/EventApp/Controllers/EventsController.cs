@@ -52,4 +52,22 @@ public class EventsController : ControllerBase
 
         return Ok(ev);
     }
+
+    [HttpDelete("delete/{id}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteEvent(int id)
+    {
+        var ev = await _db.Events
+            .Include(e => e.Participants)
+            .FirstOrDefaultAsync(e => e.Id == id);
+
+        if (ev == null)
+            return NotFound(new { message = "Event not found" });
+
+        _db.Participants.RemoveRange(ev.Participants);
+        _db.Events.Remove(ev);
+        await _db.SaveChangesAsync();
+
+        return Ok(new { message = "Event deleted." });
+    }
 }

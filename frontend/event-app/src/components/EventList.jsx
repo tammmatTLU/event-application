@@ -1,8 +1,19 @@
 import { useState } from 'react';
 import RegisterForm from './RegisterForm';
+import client from '../api/client';
 
-export default function EventList({ events, onRefresh }) {
+export default function EventList({ events, onRefresh, isAdmin }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const handleDelete = async (eventId) => {
+    if (!window.confirm('Are you sure you want to delete this event?')) return;
+    try {
+      await client.delete(`/events/delete/${eventId}`);
+      onRefresh();
+    } catch {
+      alert('Failed to delete event.');
+    }
+  };
 
   if (events.length === 0) {
     return (
@@ -31,6 +42,14 @@ export default function EventList({ events, onRefresh }) {
             >
               {event.participantCount >= event.maxAttendees ? 'Full' : 'Register'}
             </button>
+            {isAdmin && (
+              <button
+                style={styles.buttonDanger}
+                onClick={() => handleDelete(event.id)}
+              >
+                🗑 Delete event
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -88,5 +107,15 @@ const styles = {
     background: 'white',
     borderRadius: '8px',
     boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+  },
+  buttonDanger: {
+    marginTop: '0.5rem',
+    background: '#e74c3c',
+    color: 'white',
+    border: 'none',
+    padding: '0.5rem 1.2rem',
+    borderRadius: '4px',
+    fontSize: '0.95rem',
+    display: 'block',
   },
 };
