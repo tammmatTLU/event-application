@@ -23,6 +23,24 @@ public class ParticipantsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
+        if (string.IsNullOrWhiteSpace(request.FirstName))
+            return BadRequest(new { message = "First name is required." });
+
+        if (string.IsNullOrWhiteSpace(request.LastName))
+            return BadRequest(new { message = "Last name is required." });
+
+        if (string.IsNullOrWhiteSpace(request.NationalId))
+            return BadRequest(new { message = "National ID is required." });
+        
+        if (!request.FirstName.All(char.IsAsciiLetter))
+            return BadRequest(new { message = "First name must contain only letters." });
+
+        if (!request.LastName.All(char.IsAsciiLetter))
+            return BadRequest(new { message = "Last name must contain only letters." });
+
+        if (!request.NationalId.All(char.IsDigit))
+            return BadRequest(new { message = "National ID must contain only numbers." });
+
         var ev = await _db.Events
             .Include(e => e.Participants)
             .FirstOrDefaultAsync(e => e.Id == request.EventId);

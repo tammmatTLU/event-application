@@ -34,8 +34,8 @@ export default function CreateEventForm({ onEventCreated }) {
       setTime('');
       setMaxAttendees('');
       onEventCreated();
-    } catch {
-      setError('Failed to create event. Make sure you are logged in.');
+    } catch(err) {
+      setError(err.response?.data?.message || 'Failed to create event.');
     }
   };
 

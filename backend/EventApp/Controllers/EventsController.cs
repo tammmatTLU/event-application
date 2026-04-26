@@ -40,6 +40,18 @@ public class EventsController : ControllerBase
     [Authorize]
     public async Task<IActionResult> CreateEvent([FromBody] CreateEventRequest request)
     {
+        if (string.IsNullOrWhiteSpace(request.Name))
+            return BadRequest(new { message = "Event name is required." });
+
+        if (request.Time == default)
+            return BadRequest(new { message = "Event time is required." });
+
+        if (request.Time < DateTime.UtcNow)
+            return BadRequest(new { message = "Event time must be in the future." });
+
+        if (request.MaxAttendees <= 0)
+            return BadRequest(new { message = "Max attendees must be a positive number." });
+        
         var ev = new Event
         {
             Name = request.Name,
