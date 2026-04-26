@@ -1,0 +1,13 @@
+.register-modal h2 {
+  margin-bottom: 0.5rem;
+}
+
+.register-modal-subtitle {
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.register-modal-actions {
+  display: flex;
+  gap: 0.5rem;
+}

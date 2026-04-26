@@ -1,0 +1,67 @@
+.participants-modal {
+  background: white;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.participants-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.participants-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.participants-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.participants-table th {
+  text-align: left;
+  padding: 0.75rem 1.5rem;
+  background: #f8f8f8;
+  border-bottom: 2px solid #eee;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.participants-table td {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.participants-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #888;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.participants-message {
+  padding: 2rem;
+  text-align: center;
+  color: #888;
+}
+
+.participants-error {
+  padding: 1rem 1.5rem;
+  color: red;
+}

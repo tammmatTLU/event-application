@@ -2,6 +2,7 @@ import { useState } from 'react';
 import RegisterForm from './RegisterForm';
 import client from '../api/client';
 import ParticipantsModal from './ParticipantsModal';
+import '../styles/EventList.css';
 
 export default function EventList({ events, onRefresh, isAdmin }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -18,47 +19,39 @@ export default function EventList({ events, onRefresh, isAdmin }) {
   };
 
   if (events.length === 0) {
-    return (
-      <div style={styles.empty}>
-        <p>No events have been created yet.</p>
-      </div>
-    );
+    return <div className="event-empty"><p>No events have been created yet.</p></div>;
   }
 
   return (
     <>
-      <div style={styles.grid}>
+      <div className="event-grid">
         {events.map(event => (
-          <div key={event.id} style={styles.card}>
-            <h3 style={{ marginBottom: '0.5rem' }}>{event.name}</h3>
-            <p style={styles.detail}>
-              🗓 {new Date(event.time).toLocaleString()}
-            </p>
-            <p style={styles.detail}>
-              👥 {event.participantCount} / {event.maxAttendees} registered
-            </p>
+          <div key={event.id} className="event-card">
+            <h3>{event.name}</h3>
+            <p className="event-detail">🗓 {new Date(event.time).toLocaleString()}</p>
+            <p className="event-detail">👥 {event.participantCount} / {event.maxAttendees} registered</p>
             <button
-              style={event.participantCount >= event.maxAttendees ? styles.buttonDisabled : styles.button}
+              className={`btn btn-block ${event.participantCount >= event.maxAttendees ? 'btn-disabled' : 'btn-primary'}`}
               onClick={() => setSelectedEvent(event)}
               disabled={event.participantCount >= event.maxAttendees}
             >
               {event.participantCount >= event.maxAttendees ? 'Full' : 'Register'}
             </button>
             {isAdmin && (
-              <button
-                style={styles.buttonSecondary}
-                onClick={() => setManagingEvent(event)}
-              >
-                👥 Edit participants
-              </button>
-            )}
-            {isAdmin && (
-              <button
-                style={styles.buttonDanger}
-                onClick={() => handleDelete(event.id)}
-              >
-                🗑 Delete event
-              </button>
+              <>
+                <button
+                  className="btn btn-secondary btn-block"
+                  onClick={() => setManagingEvent(event)}
+                >
+                  👥 Edit participants
+                </button>
+                <button
+                  className="btn btn-danger btn-block"
+                  onClick={() => handleDelete(event.id)}
+                >
+                  🗑 Delete event
+                </button>
+              </>
             )}
           </div>
         ))}
@@ -74,6 +67,7 @@ export default function EventList({ events, onRefresh, isAdmin }) {
           }}
         />
       )}
+
       {managingEvent && (
         <ParticipantsModal
           event={managingEvent}
@@ -84,67 +78,3 @@ export default function EventList({ events, onRefresh, isAdmin }) {
     </>
   );
 }
-
-const styles = {
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-    gap: '1rem',
-  },
-  card: {
-    background: 'white',
-    padding: '1.5rem',
-    borderRadius: '8px',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-  },
-  detail: { color: '#555', marginBottom: '0.5rem' },
-  button: {
-    marginTop: '1rem',
-    background: '#3498db',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1.2rem',
-    borderRadius: '4px',
-    fontSize: '0.95rem',
-  },
-  buttonDisabled: {
-    marginTop: '1rem',
-    background: '#bdc3c7',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1.2rem',
-    borderRadius: '4px',
-    fontSize: '0.95rem',
-    cursor: 'not-allowed',
-  },
-  empty: {
-    textAlign: 'center',
-    padding: '3rem',
-    color: '#888',
-    background: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-  },
-  buttonDanger: {
-    marginTop: '0.5rem',
-    background: '#e74c3c',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1.2rem',
-    borderRadius: '4px',
-    fontSize: '0.95rem',
-    display: 'block',
-    width: '100%',
-  },
-  buttonSecondary: {
-    marginTop: '0.5rem',
-    background: '#7f8c8d',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1.2rem',
-    borderRadius: '4px',
-    fontSize: '0.95rem',
-    display: 'block',
-    width: '100%',
-  },
-};

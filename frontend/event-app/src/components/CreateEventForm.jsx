@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import client from '../api/client';
+import '../styles/CreateEventForm.css'
 
 export default function CreateEventForm({ onEventCreated }) {
   const [name, setName] = useState('');
@@ -40,11 +41,11 @@ export default function CreateEventForm({ onEventCreated }) {
   };
 
   return (
-    <div style={styles.card}>
-      <h2 style={{ marginBottom: '1rem' }}>Create New Event</h2>
+    <div className="create-event-card">
+      <h2>Create New Event</h2>
       <form onSubmit={handleSubmit}>
         <input
-          style={styles.input}
+          className="input"
           type="text"
           placeholder="Event name"
           value={name}
@@ -52,14 +53,14 @@ export default function CreateEventForm({ onEventCreated }) {
           required
         />
         <input
-          style={styles.input}
+          className="input"
           type="datetime-local"
           value={time}
           onChange={e => setTime(e.target.value)}
           required
         />
         <input
-          style={styles.input}
+          className="input"
           type="number"
           placeholder="Max attendees"
           value={maxAttendees}
@@ -67,51 +68,12 @@ export default function CreateEventForm({ onEventCreated }) {
           min="1"
           required
         />
-        {error && <p style={styles.error}>{error}</p>}
-        {success && <p style={styles.success}>{success}</p>}
-        <button style={styles.button} type="submit">Create event</button>
-        <hr style={{ margin: '1.5rem 0', borderColor: '#eee' }} />
-        <button style={styles.buttonDanger} onClick={handleReset}>
-          🗑 Clear all data
-        </button>
+        {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
+        <button className="btn btn-success" type="submit">Create event</button>
       </form>
+      <hr className="create-event-divider" />
+      <button className="btn btn-danger" onClick={handleReset}>🗑 Clear all data</button>
     </div>
   );
 }
-
-const styles = {
-  card: {
-    background: 'white',
-    padding: '1.5rem',
-    borderRadius: '8px',
-    marginBottom: '2rem',
-    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-  },
-  input: {
-    display: 'block',
-    width: '100%',
-    padding: '0.5rem',
-    marginBottom: '1rem',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    fontSize: '0.95rem',
-  },
-  button: {
-    background: '#27ae60',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1.2rem',
-    borderRadius: '4px',
-    fontSize: '0.95rem',
-  },
-  error: { color: 'red', marginBottom: '1rem' },
-  success: { color: 'green', marginBottom: '1rem' },
-  buttonDanger: {
-    background: '#e74c3c',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1.2rem',
-    borderRadius: '4px',
-    fontSize: '0.95rem',
-  },
-};
