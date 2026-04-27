@@ -61,6 +61,7 @@ Open `appsettings.Development.json` and set your desired admin credentials and J
   }
 }
 ```
+Example secret: `X7k#mP2$vQ9nL4wR8jF6hD3tY5uC1eA0`
 
 ### 3. Run the backend
 
