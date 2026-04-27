@@ -16,9 +16,9 @@ export default function App() {
         onLogout={() => setIsAdmin(false)}
       />
       <main style={{ maxWidth: '900px', margin: '2rem auto', padding: '0 1rem' }}>
-        {isAdmin && <CreateEventForm onEventCreated={fetchEvents} />}
+        {isAdmin && <CreateEventForm onEventCreated={refetch} />}
         <h2 style={{ marginBottom: '1rem' }}>Upcoming Events</h2>
-        <EventList events={events} onRefresh={fetchEvents} isAdmin={isAdmin}/>
+        <EventList events={events} onRefresh={refetch} isAdmin={isAdmin}/>
       </main>
     </>
   );
